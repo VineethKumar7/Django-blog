@@ -1,22 +1,9 @@
 {%extends "base.html" %}
 {% block head_title %}{{instance.title}} | {{block.super}} {% endblock head_title %}
 
-<style>
-{% block style %}
-h1{
-    color: #777777;
-}
-{% endblock style %}
-</style>
-
-
 {% block content %}
-<h1>{{title}}</h1>
-{{instance.title}}<br>
-{{instance.content}}<br>
-{{instance.timestap}}<br>
-{{instance.updated}}<br>
-{{instance.id}}<br>
-{{instance.pk}}<br>
-
-{%endblock%}
+<div class="col-sm-6 col-sm-offset-3">
+  <h1>{{title}}<small>{{instance.timestap}}</small></h1>
+  {{instance.content | linebreaks}}<br>
+</div>
+{%endblock content%}
