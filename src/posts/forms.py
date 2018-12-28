@@ -8,5 +8,6 @@ class PostForm(forms.ModelForm):
         # is the list of fields that we have to include inside the post.
         fields = [
             "title",
+            "image",
             "content",
         ]
