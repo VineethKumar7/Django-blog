@@ -1,12 +1,11 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
 
 def upload_location(instance, filename):
     # Its returning a relative string where it's going.
     return "%s/%s" %(instance.id,filename)
-
-
-
 
 # Create your models here.
 class Post(models.Model):
@@ -23,7 +22,25 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     def get_absolute_url(self):
-        return reverse("posts:detail",kwargs={"id":self.id})
+        return reverse("posts:detail",kwargs={"slug": self.slug})
     #This makes sure that all the datas are in this order.
     class Meta:
         ordering = ["-timestap", "-updated"]
+def create_slug(instance, new_slug=None):
+    slug = slugify(instance.title)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Post.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    if exists:
+        #If exist then it is going to be recursive here
+        new_slug = "%s-%s"%(slug, qs.first().id)
+        return create_slug(instance, new_slug= new_slug)
+    return slug
+
+def pre_save_post_reciver(sender, instance, *args, **kwargs):
+    #we know that this function assigns value to slug field
+    #if value is not present in it then we do this
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+pre_save.connect(pre_save_post_reciver, sender=Post)
