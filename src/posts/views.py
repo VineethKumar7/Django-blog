@@ -12,9 +12,15 @@ def post_create(request):
     # This line is updated
     if not request.user.is_staff or not request.user.is_superuser:
         raise Http404
+    # Add this below code if the above verification is not there
+    # if not request.user.is_authenticated():
+    #     raise Http404
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
+        # This assumed that the user is logged in bez Http404 checks it
+        # This is newly added line
+        instance.user = request.user
         instance.save()
         messages.success(request, "Successfully Created")
         return HttpResponseRedirect(instance.get_absolute_url())
