@@ -10,4 +10,7 @@ class PostForm(forms.ModelForm):
             "title",
             "image",
             "content",
+            # These two fields are added
+            "draft",
+            "publish",
         ]
