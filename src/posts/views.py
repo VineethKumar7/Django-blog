@@ -1,3 +1,4 @@
+from urllib.parse import quote
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404,redirect
@@ -22,9 +23,13 @@ def post_create(request):
 
 def post_detail(request,slug):
     instance = get_object_or_404(Post, slug=slug)
+    # The content share string is passed here
+    share_string= quote(instance.content)
+    # and it is passed into the context
     context ={
     "title": instance.title,
     "instance":instance,
+    "share_string":share_string,
     }
     return render(request, "post_detail.html", context)
 
