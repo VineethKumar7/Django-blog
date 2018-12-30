@@ -2,6 +2,7 @@ from urllib.parse import quote
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render,get_object_or_404,redirect
+from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 # Create your views here.
@@ -31,6 +32,9 @@ def post_create(request):
 
 def post_detail(request,slug):
     instance = get_object_or_404(Post, slug=slug)
+    if instance.draft or instance.publish > timezone.now().date():
+        if not request.user.is_staff or not request.user.is_superuser:
+            raise Http404
     # The content share string is passed here
     share_string= quote(instance.content)
     # and it is passed into the context
@@ -42,8 +46,11 @@ def post_detail(request,slug):
     return render(request, "post_detail.html", context)
 
 def post_list(request):
-    # In revese order of timestap then
-    queryset_list = Post.objects.all()
+    today = timezone.now().date()
+    queryset_list = Post.objects.active()
+    # the below two line segments are added now
+    if request.user.is_staff or request.user.is_superuser:
+        queryset_list = Post.objects.all()
     paginator = Paginator(queryset_list, 6) # Show 25 contacts per page
     page_request_var = "abc"
     page = request.GET.get(page_request_var)
@@ -58,7 +65,8 @@ def post_list(request):
     context ={
     "object_list":queryset,
     "title": "List",
-    "page_request_var":page_request_var
+    "page_request_var":page_request_var,
+    "today":today,
     }
     return render(request, "post_list.html", context)
 

@@ -3,11 +3,20 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from django.utils import timezone
 
 def upload_location(instance, filename):
     # Its returning a relative string where it's going.
     return "%s/%s" %(instance.id,filename)
 
+class PostManager(models.Manager):
+    # We are over riding the default all
+    def active(self, *args, **kwargs):
+        # super(PostManager, self) this get the orginal all()
+         # it's inheriting from model.Manager
+         # super(PostManager, self) is getting orginal all
+         # Then we are appending stuff to it
+        return super(PostManager, self).filter(draft=False).filter(publish__lte=timezone.now())
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default = 1)
@@ -23,6 +32,9 @@ class Post(models.Model):
     publish = models.DateField(auto_now = False, auto_now_add=False)
     updated = models.DateTimeField(auto_now= True, auto_now_add = False)
     timestap = models.DateTimeField(auto_now= False, auto_now_add = True)
+
+    objects = PostManager()
+
     def __str__(self):
         return self.title
     def get_absolute_url(self):
