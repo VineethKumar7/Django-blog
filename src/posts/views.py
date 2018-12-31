@@ -5,6 +5,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
+from django.db.models import Q
 # Create your views here.
 from .models import Post
 from .forms import PostForm
@@ -51,6 +52,15 @@ def post_list(request):
     # the below two line segments are added now
     if request.user.is_staff or request.user.is_superuser:
         queryset_list = Post.objects.all()
+    query = request.GET.get("q")
+    if query:
+        queryset_list = queryset_list.filter(
+        Q(title__icontains = query) |
+        Q(content__icontains = query) |
+        Q(user__first_name__icontains = query) |
+        Q(user__last_name__icontains = query)
+        ).distinct()
+
     paginator = Paginator(queryset_list, 6) # Show 25 contacts per page
     page_request_var = "abc"
     page = request.GET.get(page_request_var)

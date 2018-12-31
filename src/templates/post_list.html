@@ -2,7 +2,12 @@
 {% block content %}
   <div class="col-sm-6 col-sm-offset-3">
     <h1>{{title}}</h1>
-
+  <form class="" action="" method="GET">
+    <!-- Note the name for the search bar is important -->
+    <!-- the url will be /?q=the_value_you_type in search bar -->
+    <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search posts">
+    <input type="submit" value="Search"><br>
+  </form>
   {% for obj in object_list %}
   <div class="row">
   <div class="col-sm-12">
@@ -26,8 +31,8 @@
   <div class="pagination">
     <span class="step-links">
         {% if object_list.has_previous %}
-        <!-- Not the variable after question mark -->
-            <a href="?{{page_request_var}}={{ object_list.previous_page_number }}">previous</a>
+        <!-- The end of href is changed -->
+            <a href="?{{page_request_var}}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -35,7 +40,7 @@
         </span>
 
         {% if object_list.has_next %}
-            <a href="?{{page_request_var}}={{ object_list.next_page_number }}">next</a>
+            <a href="?{{page_request_var}}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
         {% endif %}
     </span>
 </div>
