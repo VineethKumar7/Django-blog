@@ -4,7 +4,8 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.utils import timezone
-
+from markdown_deux import markdown
+from django.utils.safestring import mark_safe
 def upload_location(instance, filename):
     # Its returning a relative string where it's going.
     return "%s/%s" %(instance.id,filename)
@@ -42,6 +43,11 @@ class Post(models.Model):
     #This makes sure that all the datas are in this order.
     class Meta:
         ordering = ["-timestap", "-updated"]
+    def get_markdown(self):
+        content = self.content
+        # Here its converting the content into markdown
+        markdown_text = markdown(content)
+        return mark_safe(markdown_text)
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
     if new_slug is not None:

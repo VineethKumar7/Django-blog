@@ -39,18 +39,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.6.0/marked.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
+        // Here we just keep the content-markdown as the class which markdown the content
+        // Console logs are deleted for the sequrity consern.
         $(".content-markdown").each(function(){
           var content = $(this).text()
-          console.log(content)
           var markedContent = marked(content)
-          console.log(markedContent)
-          // This line is added
           $(this).html(markedContent)
         })
-        // Img is looking for the image tag with the parent tag content-markdown
-
-        $(".content-markdown img").each(function(){
-          // Bootstrap class is added here.
+        // The additional class that added is to do other type of CSS.
+        // Here we have changed 'content-markdown' to 'post-detail-item'
+        $(".post-detail-item img").each(function(){
           $(this).addClass("img-responsive")
         })
       })
