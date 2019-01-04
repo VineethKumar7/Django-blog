@@ -21,7 +21,7 @@
         <h3><a href="{{obj.get_absolute_url}}">{{obj.title}}</a><small>{{obj.publish}}</small></h3>
         <p>{% if obj.user.get_full_name%}Author: {{obj.user.get_full_name}}{%endif%}</p>
         <!-- Here we removed the paragraph tag for design issues -->
-        {{obj.get_markdown}}
+        {{obj.get_markdown | truncatechars_html:9 }}
         <p><a href="{{obj.get_absolute_url}}" class="btn btn-primary" role="button">View</a> </p>
       </div>
     </div>
