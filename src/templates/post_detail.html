@@ -33,7 +33,7 @@ Linkedin
 <a href="http://www.reddit.com/submit?url={{request.build_absolute_uri}}/&title={{share_string}}.">Share on Reddit</a>-->
 <div class="row">
   <div class="col-sm-12">
-    {{instance.content | linebreaks}}<br>
+<div class="content-markdown">{{instance.content}}</div><br>
   <div class="fb-comments" data-href="{{request.build_absolute_uri}}" data-numposts="5"></div>
 </div>
 </div>
