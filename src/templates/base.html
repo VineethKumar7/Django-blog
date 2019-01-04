@@ -47,6 +47,12 @@
           // This line is added
           $(this).html(markedContent)
         })
+        // Img is looking for the image tag with the parent tag content-markdown
+
+        $(".content-markdown img").each(function(){
+          // Bootstrap class is added here.
+          $(this).addClass("img-responsive")
+        })
       })
     </script>
   </body>
