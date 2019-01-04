@@ -1,16 +1,16 @@
 from django import forms
-
 from .models import Post
-
+from pagedown.widgets import PagedownWidget
 class PostForm(forms.ModelForm):
+    # We need to add this content variable here
+    content = forms.CharField(widget=PagedownWidget)
+    publish = forms.DateField(widget = forms.SelectDateWidget)
     class Meta:
         model = Post
-        # is the list of fields that we have to include inside the post.
         fields = [
             "title",
             "image",
             "content",
-            # These two fields are added
             "draft",
             "publish",
         ]
