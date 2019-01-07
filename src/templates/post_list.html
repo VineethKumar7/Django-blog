@@ -3,10 +3,10 @@
   <div class="col-sm-6 col-sm-offset-3">
     <h1>{{title}}</h1>
   <form class="" action="" method="GET">
-    <!-- Note the name for the search bar is important -->
-    <!-- the url will be /?q=the_value_you_type in search bar -->
-    <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search posts">
-    <input type="submit" value="Search"><br>
+    <div class="input-group">
+      <input class = "" type="text" name="q" value="{{request.GET.q}}" placeholder="Search posts">
+      <input type="submit" value="Search"><br>
+    </div>
   </form>
   {% for obj in object_list %}
   <div class="row">
